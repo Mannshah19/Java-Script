@@ -1,6 +1,7 @@
-"use strict";
-let a = 33;
-let b = 12;
+let a:number = 33;
+
+let b:number = 12;
+
 console.log(a + b);
 console.log(a - b);
 console.log(a * b);

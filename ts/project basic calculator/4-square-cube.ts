@@ -1,6 +1,6 @@
 let a:number = 5;
 
-let square , cube;
+let square:number, cube:number;
 
 square = a*a;
 
