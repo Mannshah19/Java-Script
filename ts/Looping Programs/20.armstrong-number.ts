@@ -10,7 +10,8 @@ while (temp > 0) {
 
 temp = num;
 
-while (temp > 0) {
+while (temp > 0) 
+    {
     let digit: number = temp % 10;
     let power: number = 1;
     for (let i: number = 0; i < totalDigits; i++) {
