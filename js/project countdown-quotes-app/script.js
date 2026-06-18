@@ -1,7 +1,7 @@
 "use strict";
 
 
-const quotes = [
+const allQuotes = [
     "Success is not final, failure is not fatal: It is the courage to continue that counts.",
     "Believe you can and you're halfway there.",
     "The harder you work for something, the greater you'll feel when you achieve it.",
@@ -10,64 +10,65 @@ const quotes = [
     "Push yourself, because no one else is going to do it for you."
 ];
 
-let currentQuote = 0;
-let quoteInterval;
+let quoteIndex = 0;
+let autoSlide;
 
 function showQuote() {
-    document.getElementById("quoteText").textContent = `"${quotes[currentQuote]}"`;
+    document.getElementById("quoteText").textContent = `"${allQuotes[quoteIndex]}"`;
 }
 
-function nextQuote() {
-    currentQuote++;
-    if (currentQuote >= quotes.length) {
-        currentQuote = 0;
+function goToNext() {
+    quoteIndex++;
+    if (quoteIndex >= allQuotes.length) {
+        quoteIndex = 0;
     }
     showQuote();
 }
 
-function prevQuote() {
-    currentQuote--;
-    if (currentQuote < 0) {
-        currentQuote = quotes.length - 1;
+function goToPrev() {
+    quoteIndex--;
+    if (quoteIndex < 0) {
+        quoteIndex = allQuotes.length - 1;
     }
     showQuote();
 }
 
 showQuote();
-quoteInterval = setInterval(nextQuote, 4000);
+autoSlide = setInterval(goToNext, 4000);
 
 document.getElementById("nextBtn").addEventListener("click", function() {
-    clearInterval(quoteInterval);
-    nextQuote();
-    quoteInterval = setInterval(nextQuote, 4000);
+    clearInterval(autoSlide);
+    goToNext();
+    autoSlide = setInterval(goToNext, 4000);
 });
 
 document.getElementById("prevBtn").addEventListener("click", function() {
-    clearInterval(quoteInterval);
-    prevQuote();
-    quoteInterval = setInterval(nextQuote, 4000);
+    clearInterval(autoSlide);
+    goToPrev();
+    autoSlide = setInterval(goToNext, 4000);
 });
 
 
-const eventDate = new Date("January 1, 2027 00:00:00");
-let countdownInterval;
-let isRunning = false;
+let newYear = new Date("January 1, 2027 00:00:00");
+let clock;
+let clockOn = false;
 
-function updateCountdown() {
+function startClock() {
 
-    const diff = eventDate - new Date();
+    let now = new Date();
+    let gap = newYear - now;
 
-    if (diff <= 0) {
-        clearInterval(countdownInterval);
-        isRunning = false;
+    if (gap <= 0) {
+        clearInterval(clock);
+        clockOn = false;
         document.getElementById("timeup").textContent = "Time's up! The event has started 🎉";
         return;
     }
 
-    let days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-    let hours   = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    let minutes = Math.floor((diff / (1000 * 60)) % 60);
-    let seconds = Math.floor((diff / 1000) % 60);
+    let days    = Math.floor(gap / (1000 * 60 * 60 * 24));
+    let hours   = Math.floor((gap / (1000 * 60 * 60)) % 24);
+    let minutes = Math.floor((gap / (1000 * 60)) % 60);
+    let seconds = Math.floor((gap / 1000) % 60);
 
     document.getElementById("days").textContent    = days    < 10 ? "0" + days    : days;
     document.getElementById("hours").textContent   = hours   < 10 ? "0" + hours   : hours;
@@ -76,20 +77,20 @@ function updateCountdown() {
 
 }
 
-updateCountdown();
-countdownInterval = setInterval(updateCountdown, 1000);
-isRunning = true;
+startClock();
+clock = setInterval(startClock, 1000);
+clockOn = true;
 
 document.getElementById("startBtn").addEventListener("click", function() {
-    if (!isRunning) {
-        countdownInterval = setInterval(updateCountdown, 1000);
-        isRunning = true;
+    if (!clockOn) {
+        clock = setInterval(startClock, 1000);
+        clockOn = true;
     }
 });
 
 document.getElementById("pauseBtn").addEventListener("click", function() {
-    clearInterval(countdownInterval);
-    isRunning = false;
+    clearInterval(clock);
+    clockOn = false;
 });
 
 
